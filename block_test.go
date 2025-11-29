@@ -45,6 +45,20 @@ func (ts *OutputBlockSuite) TestSplitsBlockLines(c *C) {
 	c.Assert(maxLen, Equals, 3)
 }
 
+func (ts *OutputBlockSuite) TestEnclosedWithQuotes(c *C) {
+	lines, maxLen := splitsBlockLines(`The "foo bar" file has moved to "a very long path". Please consider it.`, 40)
+	c.Assert(lines, DeepEquals, []string{`The "foo bar" file has moved to `, `"a very long path". Please consider it.`})
+	c.Assert(maxLen, Equals, 38)
+
+	lines, maxLen = splitsBlockLines(`The "foo bar" file has moved to "a very very very very very very very very very unterminated long path.`, 40)
+	c.Assert(lines, DeepEquals, []string{`The "foo bar" file has moved to `, `"a very very very very very very very ver`, `y very unterminated long path.`})
+	c.Assert(maxLen, Equals, 40)
+
+	lines, maxLen = splitsBlockLines(`This is an example of a message about a "/very/very/very/very/very/very/very/very/very/very/very/very/very/very/very/very/very/long/path" that needs to be moved to "/another/very/very/very/very/very/very/very/long/path"`, 107)
+	c.Assert(lines, DeepEquals, []string{`This is an example of a message about a `, `"/very/very/very/very/very/very/very/very/very/very/very/very/very/very/very/very/very/long/path" that needs`, ` to be moved to "/another/very/very/very/very/very/very/very/long/path"`})
+	c.Assert(maxLen, Equals, 107)
+}
+
 func (ts *OutputBlockSuite) TestSplitsBlockLinesDonotPanic(c *C) {
 	lines, maxLen := splitsBlockLines("Foo Baz<", 4)
 	c.Assert(lines, DeepEquals, []string{"Foo ", "Baz<"})

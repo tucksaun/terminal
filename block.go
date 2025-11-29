@@ -62,18 +62,28 @@ func splitsBlockLines(msg string, width int) ([]string, int) {
 	for _, line := range strings.Split(msg, "\n") {
 		line = strings.ReplaceAll(line, "\t", "        ")
 		lastLinePos := 0
+		lastOpeningQuotePos := 0
 		inAnOpeningTag := false
 		inAClosingTag := false
 		inATagBody := false
+		inQuotes := false
 		length := 0
 		var lastChar rune
 		for pos, char := range line {
-			if char == '<' && lastChar != '\\' {
-				if len(line) > pos+1 && line[pos+1] == '/' {
-					inAClosingTag = true
-					inATagBody = false
-				} else {
-					inAnOpeningTag = true
+			if lastChar != '\\' {
+				switch char {
+				case '<':
+					if len(line) > pos+1 && line[pos+1] == '/' {
+						inAClosingTag = true
+						inATagBody = false
+					} else {
+						inAnOpeningTag = true
+					}
+				case '"':
+					inQuotes = !inQuotes
+					if inQuotes {
+						lastOpeningQuotePos = pos
+					}
 				}
 			}
 
@@ -92,10 +102,18 @@ func splitsBlockLines(msg string, width int) ([]string, int) {
 			}
 
 			if length >= width && !inAClosingTag && !inAnOpeningTag && !inATagBody {
+				// if we cross the line boundary but are currently within a
+				// quoted text, we jump back just before the opening quote
+				// because we don't want to cut the text inside
+				if inQuotes && lastOpeningQuotePos > lastLinePos {
+					length = pos - lastOpeningQuotePos
+					pos = lastOpeningQuotePos - 1
+				} else {
+					maxLen = width
+					length = 0
+				}
 				lines = append(lines, line[lastLinePos:pos+1])
-				maxLen = width
 				lastLinePos = pos + 1
-				length = 0
 			}
 
 			lastChar = char
