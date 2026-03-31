@@ -106,7 +106,7 @@ func (s style) createBlock(messages []string, typePrefix, style, prefix string, 
 
 	if padding {
 		if style != "" {
-			buf.WriteString(fmt.Sprintf("<%s>", style))
+			fmt.Fprintf(&buf, "<%s>", style)
 		}
 		buf.WriteString(fullPadding)
 		if style != "" {
@@ -117,7 +117,7 @@ func (s style) createBlock(messages []string, typePrefix, style, prefix string, 
 
 	for i, line := range lines {
 		if style != "" {
-			buf.WriteString(fmt.Sprintf("<%s>", style))
+			fmt.Fprintf(&buf, "<%s>", style)
 		}
 
 		buf.WriteString(prefix)
@@ -143,7 +143,7 @@ func (s style) createBlock(messages []string, typePrefix, style, prefix string, 
 
 	if padding {
 		if style != "" {
-			buf.WriteString(fmt.Sprintf("<%s>", style))
+			fmt.Fprintf(&buf, "<%s>", style)
 		}
 		buf.WriteString(fullPadding)
 		if style != "" {

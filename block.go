@@ -33,18 +33,18 @@ func FormatBlockMessage(format string, msg string) string {
 	lines, maxLen := splitsBlockLines(msg, width-4) // 2 spaces on the left, 2 on the right
 	fullPadding := strings.Repeat(" ", maxLen+4)
 
-	buf.WriteString(fmt.Sprintf("<%s>", format))
+	fmt.Fprintf(&buf, "<%s>", format)
 	buf.WriteString(fullPadding)
 	buf.WriteString("</>\n")
 	for _, line := range lines {
-		buf.WriteString(fmt.Sprintf("<%s>  ", format))
+		fmt.Fprintf(&buf, "<%s>  ", format)
 		lenLine, _ := Stdout.GetFormatter().Format([]byte(line), &buf)
 		if n := maxLen - lenLine; n >= 0 {
 			buf.WriteString(strings.Repeat(" ", n))
 		}
 		buf.WriteString("  </>\n")
 	}
-	buf.WriteString(fmt.Sprintf("<%s>", format))
+	fmt.Fprintf(&buf, "<%s>", format)
 	buf.WriteString(fullPadding)
 	buf.WriteString("</>\n")
 
