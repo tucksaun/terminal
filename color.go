@@ -148,7 +148,7 @@ func parseColor(color string) (string, error) {
 		if len(color) == 4 {
 			_, err := fmt.Sscanf(color, "#%1x%1x%1x", &r, &g, &b)
 			if err != nil {
-				return "", errors.Errorf(fmt.Sprintf("invalid \"%s\" color", color))
+				return "", errors.Errorf("invalid %q color", color)
 			}
 			r *= 17
 			g *= 17
@@ -156,10 +156,10 @@ func parseColor(color string) (string, error) {
 		} else if len(color) == 7 {
 			_, err := fmt.Sscanf(color, "#%02x%02x%02x", &r, &g, &b)
 			if err != nil {
-				return "", errors.Errorf(fmt.Sprintf("invalid \"%s\" color", color))
+				return "", errors.Errorf("invalid %q color", color)
 			}
 		} else {
-			return "", errors.Errorf(fmt.Sprintf("invalid \"%s\" color", color))
+			return "", errors.Errorf("invalid %q color", color)
 		}
 
 		return convertHexColorToAnsi(r, g, b), nil
@@ -167,7 +167,7 @@ func parseColor(color string) (string, error) {
 
 	c, ok := defaultANSIColors[color]
 	if !ok {
-		return "", errors.Errorf(fmt.Sprintf("invalid \"%s\" color", color))
+		return "", errors.Errorf("invalid %q color", color)
 	}
 
 	return c, nil

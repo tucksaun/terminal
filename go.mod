@@ -1,14 +1,14 @@
 module github.com/symfony-cli/terminal
 
-go 1.17
+go 1.25
 
 require (
-	github.com/mattn/go-colorable v0.1.13
+	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-isatty v0.0.20
 	github.com/pkg/errors v0.9.1
-	github.com/rs/zerolog v1.32.0
-	golang.org/x/sys v0.20.0
-	golang.org/x/term v0.19.0
+	github.com/rs/zerolog v1.35.0
+	golang.org/x/sys v0.42.0
+	golang.org/x/term v0.41.0
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
 )
 
